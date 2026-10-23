@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.npm-cache/
+tmp/
+.env
+.env.*
+!.env.example
+*.log
+Thumbs.db
+Desktop.ini
