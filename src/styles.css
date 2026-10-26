@@ -2726,4 +2726,45 @@ main,section,article{min-width:0}
 @media(max-width:1023px){.hero .hero-copy{padding:48px 64px 0}.hero .hero-copy p{max-width:none}.hero .hero-cards{padding-top:40px}}
 @media(max-width:620px){.hero{padding-bottom:32px}.hero .hero-copy{padding:40px 20px 0}.hero .hero-cards{padding-top:36px}}
 #root .industry-cards{padding-bottom:0}
-#root .industries-section{padding-top:0}
+#root .industries-section{padding-top:10}
+
+/* Rotating phrase in the hero heading (RotatingWords.jsx): outgoing drifts up and fades, incoming rises in */
+.rw{--rw-duration:.55s;display:inline-block;white-space:nowrap;vertical-align:bottom}
+.rw-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.rw-window{position:relative;display:inline-block;vertical-align:bottom;text-align:left;transition:width var(--rw-duration) cubic-bezier(.22,1,.36,1)}
+.rw-word{display:inline-block}
+.rw-word.is-out{position:absolute;top:0;left:0;animation:rw-out var(--rw-duration) cubic-bezier(.55,0,.45,1) forwards}
+.rw-word.is-in{animation:rw-in var(--rw-duration) cubic-bezier(.22,1,.36,1) both}
+.rw-sizers{position:absolute;visibility:hidden;height:0;overflow:hidden;white-space:nowrap}
+.rw-sizers>span{position:absolute;top:0;left:0}
+@keyframes rw-out{to{opacity:0;transform:translateY(-.35em)}}
+@keyframes rw-in{from{opacity:0;transform:translateY(.35em)}}
+.hero .hero-copy h1 .hero-rotator{color:var(--color-brand-primary)}
+@media(prefers-reduced-motion:reduce){.rw-window{transition:none}.rw-word.is-in,.rw-word.is-out{animation:none}}
+/* sequence like the reference: the old phrase leaves first, then the new one rises in */
+.rw-word.is-out{animation-duration:.3s}
+.rw-word.is-in{animation-duration:.4s;animation-delay:.22s}
+/* Hero heading: left-aligned block centred on the page, with a fixed slot for the rotating phrase,
+   so "The Operating System" and "for" never move — only the phrase changes (as in the reference video). */
+@media(min-width:621px){
+  .hero .hero-copy h1{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto;text-align:left}
+  .hero .hero-copy h1 .rw-window{width:var(--rw-max,auto)!important;transition:none}
+}
+/* rotating phrase sits on the same baseline as "for" */
+.rw,.rw-window,.rw-word{vertical-align:baseline}
+
+/* Hero photo cards: image fills the card edge to edge, title on top in white over a soft fade */
+.hero .travel-card.travel-card-photo{position:relative;padding:0;overflow:hidden;background:#dfe5f0}
+.travel-card-photo .travel-card-photo-image{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.travel-card-photo:after{position:absolute;inset:0 0 auto;height:46%;background:linear-gradient(180deg,rgba(10,18,40,.62),rgba(10,18,40,0));content:'';pointer-events:none}
+.hero .travel-card-photo .travel-card-top{position:relative;z-index:1;padding:11px}
+.hero .travel-card-photo .travel-card-title,.hero .travel-card-photo .travel-card-arrow{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+/* Hero: carousel pulled up so the cards and dots always sit inside the first screen; content centred vertically */
+.hero{justify-content:center;padding-bottom:clamp(16px,3vh,40px)}
+.hero .hero-copy{padding-top:clamp(8px,3vh,48px)}
+.hero .hero-copy p{margin:clamp(12px,2vh,24px) auto clamp(16px,2.6vh,28px)}
+.hero .hero-cards{padding-top:clamp(16px,3.5vh,48px)}
+.hero .carousel{margin-top:clamp(8px,1.6vh,20px)}
+.hero .hero-foot{padding-top:0}
+@media(max-height:760px),(max-width:620px){.hero .hero-copy{padding-top:0}.hero .hero-cards{padding-top:clamp(12px,2.4vh,28px)}.hero{padding-bottom:24px}}
+

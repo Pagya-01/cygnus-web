@@ -15,7 +15,7 @@ const MIN_SLOT_STEP_PX = 159; // Figma keeps the 1440 spacing on tablet and mobi
 // Cards share the hero screen with the copy, so they grow only as far as the screen height allows (1 = Figma size).
 function getCardScale(width, height) {
   if (width <= 620) return 1;
-  return Math.min(1.4, Math.max(1, Math.min(width / 860, (height - 600) / 160)));
+  return Math.min(1.4, Math.max(1, Math.min(width / 860, (height - 620) / 170)));
 }
 
 function getOffset(index, activeIndex, count) {
@@ -110,7 +110,7 @@ export default function HeroCarousel({ activeIndex, onActiveIndexChange }) {
   const cardScale = getCardScale(viewportWidth, viewportHeight);
 
   return <div
-    style={{ '--carousel-height': `${CARD_SIZE_PX.height * cardScale + 44}px` }}
+    style={{ '--carousel-height': `${CARD_SIZE_PX.height * cardScale + 36}px` }}
     className={`carousel${reducedMotion ? ' carousel-reduced-motion' : ''}`}
     role="region"
     aria-label="Business travel platform features"
