@@ -35,3 +35,30 @@
 @media (max-width: 760px) {
   .voyager-engine-3d { --ve-stage: min(64vh, 560px); --ve-scroll: 200vh; --ve-header: 78px; }
 }
+
+/* Backdrop that fades to the navy of the capabilities band below as the engine passes its half turn
+   (--ve-night: 0 → 1, set from voyagerEngine3d.js). The track runs straight into that band, so it joins seamlessly. */
+.voyager-engine-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #0f1e36;
+  opacity: var(--ve-night, 0);
+  pointer-events: none;
+}
+.voyager-engine-3d-stage { z-index: 1; }
+
+/* White Cygnus mark in the middle gap once the parts are apart.
+   Position, size and visibility come from voyagerEngine3d.js (--ve-logo-x / -y / -size / -show). */
+.voyager-engine-3d-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--ve-logo-size, 64px);
+  height: auto;
+  opacity: var(--ve-logo-show, 0);
+  transform: translate(calc(var(--ve-logo-x, 50%) - 50%), calc(var(--ve-logo-y, 50%) - 50%)) scale(calc(.6 + .4 * var(--ve-logo-show, 0)));
+  filter: brightness(0) invert(1) drop-shadow(0 0 18px rgba(165, 180, 252, .55));
+  pointer-events: none;
+}

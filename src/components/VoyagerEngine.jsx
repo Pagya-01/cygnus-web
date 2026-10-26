@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { mountVoyagerEngine } from './voyagerEngine3d.js';
 import './VoyagerEngine.css';
+import cygnusMark from '../assets/voyager-mark.svg';
 
 const REDUCED = '(prefers-reduced-motion: reduce)';
 
@@ -14,6 +15,7 @@ const REDUCED = '(prefers-reduced-motion: reduce)';
 export default function VoyagerEngine({ theme = 'light' }) {
   const trackRef = useRef(null);
   const canvasRef = useRef(null);
+  const logoRef = useRef(null);
   const [still, setStill] = useState(() => window.matchMedia(REDUCED).matches);
   const [failed, setFailed] = useState(false);
 
@@ -26,7 +28,7 @@ export default function VoyagerEngine({ theme = 'light' }) {
 
   useEffect(() => {
     try {
-      return mountVoyagerEngine(trackRef.current, canvasRef.current, { theme, still });
+      return mountVoyagerEngine(trackRef.current, canvasRef.current, { theme, still, logo: logoRef.current });
     } catch (error) {
       console.warn('Voyager engine: WebGL is not available, hiding the animation.', error);
       setFailed(true);
@@ -44,6 +46,7 @@ export default function VoyagerEngine({ theme = 'light' }) {
           role="img"
           aria-label="The Voyager engine: a gearbox that turns and separates into its parts as you scroll"
         />
+        <img ref={logoRef} className="voyager-engine-3d-logo" src={cygnusMark} alt="" aria-hidden="true"/>
       </div>
     </div>
   );

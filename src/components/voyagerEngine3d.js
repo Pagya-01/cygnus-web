@@ -11,7 +11,8 @@
  *   0.50 – 0.66  the machine grows to full size
  *   0.66 – 0.94  the parts slide apart along the axis
  *
- * mountVoyagerEngine(track, canvas, { theme: 'light' | 'dark', still: false }) → destroy()
+ * mountVoyagerEngine(track, canvas, { theme: 'light' | 'dark', still: false, logo }) → destroy()
+ *   logo  : optional element placed over the canvas; it is kept centred in the middle gap and fades in once the parts are apart
  *   theme : 'light' = navy lines for light backgrounds, 'dark' = white lines for dark backgrounds
  *   still : true draws one still frame (parts apart) and does not animate, for reduced motion
  */
@@ -28,7 +29,14 @@ const seg = (p, a, b) => clamp((p - a) / (b - a));
 const ease = x => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const lerp = (a, b, t) => a + (b - a) * t;
 
-export function mountVoyagerEngine(track, canvas, { theme = 'light', still = false } = {}) {
+// Share of the stage the separated machine fills (1 = edge to edge). Lower = smaller engine.
+const SIZE = 0.7;          // wide screens
+const SIZE_PORTRAIT = 0.9; // phones (the machine stands upright)
+// Extra space opened in the middle of the machine for the logo (model units, fully apart).
+const LOGO_GAP = 1.5;
+const LOGO_SLOT = 3; // the logo sits between part index 3 (input shaft) and 4 (spur gear)
+
+export function mountVoyagerEngine(track, canvas, { theme = 'light', still = false, logo = null } = {}) {
   const T = THEMES[theme] || THEMES.light;
   const stage = canvas.parentElement;
 
@@ -164,11 +172,15 @@ export function mountVoyagerEngine(track, canvas, { theme = 'light', still = fal
     spokes(p, .5, 1.5, -.92, 16);
   });
 
+  let logoZ = 0; // centre of the logo gap, along the axis
   const layout = explode => {
-    const gap = lerp(.08, 1.05, explode);
-    const total = parts.reduce((s, p) => s + p.userData.span, 0) + gap * (parts.length - 1);
+    const gap = lerp(.08, 1.05, explode), extra = LOGO_GAP * explode;
+    const total = parts.reduce((s, p) => s + p.userData.span, 0) + gap * (parts.length - 1) + extra;
     let z = -total / 2;
-    for (const p of parts) { p.position.z = z + p.userData.span / 2; z += p.userData.span + gap; }
+    parts.forEach((p, i) => {
+      p.position.z = z + p.userData.span / 2; z += p.userData.span + gap;
+      if (i === LOGO_SLOT) { logoZ = z - gap / 2 + extra / 2; z += extra; }
+    });
     return total;
   };
   const EXPLODED = layout(1);
@@ -184,7 +196,24 @@ export function mountVoyagerEngine(track, canvas, { theme = 'light', still = fal
     const dist = portrait
       ? Math.max(len / (2 * t * .86), dia / (2 * t * camera.aspect * .82))
       : Math.max(len / (2 * t * camera.aspect * .86), dia / (2 * t * .8));
-    camera.position.set(0, dist * .02, dist); camera.lookAt(0, 0, 0);
+    const size = portrait ? SIZE_PORTRAIT : SIZE;
+    camera.position.set(0, dist * .02 / size, dist / size); camera.lookAt(0, 0, 0);
+  };
+
+  // ---------- keep the logo element centred on the middle gap (projected to the screen)
+  const logoPoint = new THREE.Vector3();
+  const placeLogo = (show, explode) => {
+    if (!logo) return;
+    logoPoint.set(0, 0, logoZ); axis.localToWorld(logoPoint); logoPoint.project(camera);
+    const W = stage.clientWidth, H = stage.clientHeight;
+    // logo size: the width of the gap on screen
+    const a = new THREE.Vector3(0, 0, logoZ - LOGO_GAP * explode * .5), b = new THREE.Vector3(0, 0, logoZ + LOGO_GAP * explode * .5);
+    axis.localToWorld(a).project(camera); axis.localToWorld(b).project(camera);
+    const gapPx = Math.hypot((b.x - a.x) * W / 2, (b.y - a.y) * H / 2);
+    logo.style.setProperty('--ve-logo-x', `${(logoPoint.x + 1) / 2 * W}px`);
+    logo.style.setProperty('--ve-logo-y', `${(1 - logoPoint.y) / 2 * H}px`);
+    logo.style.setProperty('--ve-logo-size', `${Math.max(28, gapPx * .78)}px`);
+    logo.style.setProperty('--ve-logo-show', show.toFixed(3));
   };
 
   // ---------- scroll progress through the track (0 → 1)
@@ -197,13 +226,28 @@ export function mountVoyagerEngine(track, canvas, { theme = 'light', still = fal
   };
 
   const faceFrom = new THREE.Color(T.faceFrom), faceTo = new THREE.Color(T.faceTo), face = new THREE.Color();
+  // light theme only: switch to the dark look as the machine passes its half turn (180° ≈ p 0.33);
+  // progress is exposed to CSS as --ve-night on the track so the backdrop can fade to navy
+  const D = THEMES.dark, nightOn = T === THEMES.light;
+  const darkFrom = new THREE.Color(D.faceFrom), darkTo = new THREE.Color(D.faceTo), darkFace = new THREE.Color();
+  const lineLight = new THREE.Color(T.line), lineDark = new THREE.Color(D.line), lineColor = new THREE.Color();
   const clock = new THREE.Clock();
+  // Smoothing: the animation eases toward the scroll position instead of jumping with each wheel step.
+  // Higher SMOOTHING = follows the scroll more tightly; lower = glides more.
+  const SMOOTHING = 5;
+  let smooth = progress(), last = performance.now();
   const frame = () => {
-    const p = progress(), time = still ? 0 : clock.getElapsedTime();
+    const now = performance.now(), dt = Math.min(.1, (now - last) / 1000); last = now;
+    const target = progress();
+    smooth = still ? target : smooth + (target - smooth) * (1 - Math.exp(-SMOOTHING * dt));
+    if (Math.abs(target - smooth) < 1e-4) smooth = target;
+    const p = smooth, time = still ? 0 : clock.getElapsedTime();
     const spin = ease(seg(p, .08, .58));          // one full 360° turn
     const tone = ease(seg(p, .2, .58));           // face colour shift during the turn
     const explode = ease(seg(p, .66, .94));       // parts slide apart
     const s = lerp(.7, 1, ease(seg(p, .5, .66)));  // grow to full size
+    const night = nightOn ? ease(seg(p, .26, .40)) : 0; // fade to the dark look around the half turn
+    track.style.setProperty('--ve-night', night.toFixed(3));
 
     root.rotation.y = .12 * (1 - spin) + spin * TAU;
     root.rotation.x = Math.sin(spin * Math.PI) * .22 + .05;
@@ -211,14 +255,18 @@ export function mountVoyagerEngine(track, canvas, { theme = 'light', still = fal
     layout(explode);
 
     face.copy(faceFrom).lerp(faceTo, tone);
+    face.lerp(darkFace.copy(darkFrom).lerp(darkTo, tone), night);
+    lineColor.copy(lineLight).lerp(lineDark, night);
     parts.forEach((part, i) => {
       const m = part.userData.m;
       m.face.color.copy(face);
-      m.line.opacity = lerp(T.lineFrom, T.lineTo, tone);
-      m.ghost.opacity = lerp(T.ghostFrom, T.ghostTo, tone);
+      m.line.color.copy(lineColor); m.ghost.color.copy(lineColor);
+      m.line.opacity = lerp(lerp(T.lineFrom, T.lineTo, tone), lerp(D.lineFrom, D.lineTo, tone), night);
+      m.ghost.opacity = lerp(lerp(T.ghostFrom, T.ghostTo, tone), lerp(D.ghostFrom, D.ghostTo, tone), night);
       part.rotation.z = part.userData.dir * (p * 2.4 + time * .06) * (i % 2 ? 1.3 : 1);
     });
     renderer.render(scene, camera);
+    placeLogo(ease(seg(p, .84, .98)), explode); // the logo appears once the parts are (almost) fully apart
   };
 
   // ---------- run only while the section is on (or near) the screen
