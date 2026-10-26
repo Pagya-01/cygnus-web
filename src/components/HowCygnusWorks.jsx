@@ -19,7 +19,7 @@ export default function HowCygnusWorks() {
       <div className="hcw-intro">
         <div className="hcw-about">
           <div className="hcw-voyager">
-            <img className="hcw-voyager-mark" src={voyagerMark} alt=""/>
+            {/* <img className="hcw-voyager-mark" src={voyagerMark} alt=""/> */}
             <strong>Voyager</strong>
           </div>
           <p className="hcw-lead">Voyager takes the request, applies your policy and handles the booking. Your team only steps in when a decision needs them.</p>
