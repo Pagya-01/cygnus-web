@@ -2768,3 +2768,64 @@ main,section,article{min-width:0}
 .hero .hero-foot{padding-top:0}
 @media(max-height:760px),(max-width:620px){.hero .hero-copy{padding-top:0}.hero .hero-cards{padding-top:clamp(12px,2.4vh,28px)}.hero{padding-bottom:24px}}
 
+
+/* Industries live feed (LiveFeed.jsx) — replaces the industry cards */
+.live-feed{position:relative;z-index:2;width:min(100%,760px);margin:0 auto;padding:22px 24px 24px;border:1px solid var(--color-border-default);border-radius:20px;background:#fff;box-shadow:0 18px 44px rgba(15,30,54,.08),0 2px 6px rgba(15,30,54,.04);box-sizing:border-box}
+.live-feed,.live-feed *{font-family:var(--font-body)!important}
+.live-feed-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.live-feed-status{display:inline-flex;align-items:center;gap:10px;color:var(--color-text-primary);font-size:14px;font-weight:600;line-height:20px}
+.live-feed-status i{position:relative;width:8px;height:8px;border-radius:50%;background:#047857}
+.live-feed-status i:after{position:absolute;inset:0;border-radius:50%;background:#10b981;animation:live-feed-ping 1.8s cubic-bezier(0,0,.2,1) infinite;content:''}
+.live-feed-caption{color:var(--color-text-muted);font-size:12px;line-height:16px}
+.live-feed-list{position:relative;margin:0;padding:0;list-style:none;overflow:hidden;mask-image:linear-gradient(180deg,#000 0,#000 78%,rgba(0,0,0,.35) 100%)}
+.live-feed-slot{position:absolute;top:0;right:0;left:0;transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .6s ease}
+.live-feed-slot.is-leaving{opacity:0}
+.live-feed-row{display:flex;height:64px;align-items:center;gap:14px;padding:0 14px;border:1px solid var(--color-border-default);border-radius:12px;background:#fff;box-sizing:border-box}
+.live-feed-row.is-fresh{animation:live-feed-in .7s cubic-bezier(.22,1,.36,1) both,live-feed-flash 2.4s ease-out both}
+.live-feed-icon{display:grid;flex:none;width:36px;height:36px;place-items:center;border-radius:10px;color:var(--color-brand-primary);background:rgba(88,98,236,.08)}
+.live-feed-text{display:flex;min-width:0;flex:1;flex-direction:column;gap:2px}
+.live-feed-text strong{overflow:hidden;color:var(--color-text-primary);font-size:14px;font-weight:600;line-height:20px;text-overflow:ellipsis;white-space:nowrap}
+.live-feed-text small{overflow:hidden;color:var(--color-text-muted);font-size:12px;line-height:16px;text-overflow:ellipsis;white-space:nowrap}
+.live-feed-badge{flex:none;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;line-height:14px;letter-spacing:.08em;text-transform:uppercase}
+.live-feed-badge.is-indigo{color:#3842c6;background:rgba(88,98,236,.14)}
+.live-feed-badge.is-green{color:#047857;background:rgba(16,185,129,.14)}
+@keyframes live-feed-in{from{opacity:0;transform:translateY(-14px) scale(.98)}}
+@keyframes live-feed-flash{0%,25%{border-color:rgba(88,98,236,.45);box-shadow:0 0 0 4px rgba(88,98,236,.08)}100%{border-color:var(--color-border-default);box-shadow:none}}
+@keyframes live-feed-ping{75%,100%{opacity:0;transform:scale(2.4)}}
+@media(max-width:620px){
+  .live-feed{padding:18px 14px 16px;border-radius:16px}
+  .live-feed-caption{display:none}
+  .live-feed-row{gap:10px;padding:0 10px}
+  .live-feed-badge{padding:3px 8px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.live-feed-status i:after,.live-feed-row.is-fresh{animation:none}.live-feed-slot{transition:none}}
+/* live feed under the four steps in How Cygnus Works */
+.hcw-live{display:flex;justify-content:center;width:100%;margin-top:clamp(24px,4vh,48px)}
+
+/* How Cygnus Works: compact step cards on the left (rise in one by one), live feed on the right */
+.hcw-flow{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:stretch;width:100%}
+#root .hcw-flow .hcw-step-list{display:flex;flex-direction:column;gap:12px;margin:0}
+#root .hcw-flow .hcw-step{display:grid;flex:1;min-height:0;grid-template-columns:40px minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:14px;row-gap:2px;align-content:center;padding:14px 18px;border-radius:14px}
+#root .hcw-flow .hcw-step-top{display:contents}
+#root .hcw-flow .hcw-step-icon{grid-row:1/3;grid-column:1;width:40px;height:40px;border-radius:10px}
+#root .hcw-flow .hcw-step-icon svg{width:20px;height:20px}
+#root .hcw-flow .hcw-step-top small{grid-row:1;grid-column:3;align-self:start;font-size:12px}
+#root .hcw-flow .hcw-step h3{grid-row:1;grid-column:2;margin:0;font-size:16px;line-height:22px}
+#root .hcw-flow .hcw-step p{grid-row:2;grid-column:2/4;margin:0;font-size:13px;line-height:19px}
+#root .hcw-flow .hcw-step-arrow{display:none}
+#root .hcw-flow .live-feed{width:100%;margin:0}
+/* entrance: from below, one after another, filling the column from the top */
+.hcw-flow .hcw-step{opacity:0;translate:0 36px}
+.hcw-flow .hcw-step-list.is-in .hcw-step{animation:hcw-step-in .7s cubic-bezier(.22,1,.36,1) calc(var(--i) * .18s) both}
+@keyframes hcw-step-in{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
+@media(max-width:1023px){.hcw-flow{grid-template-columns:minmax(0,1fr);gap:20px}}
+@media(prefers-reduced-motion:reduce){.hcw-flow .hcw-step{opacity:1;translate:none}.hcw-flow .hcw-step-list.is-in .hcw-step{animation:none}}
+
+/* Live feed: a glowing light that travels round the border, starting at the top */
+@property --lf-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+.live-feed{isolation:isolate}
+.live-feed::before,.live-feed::after{position:absolute;inset:-1px;z-index:-1;border-radius:inherit;padding:2px;background:conic-gradient(from var(--lf-angle),transparent 0deg,transparent 250deg,rgba(103,232,249,.9) 300deg,#5862ec 335deg,#a5b4fc 352deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:lf-border-spin 4.5s linear infinite;pointer-events:none;content:''}
+/* soft glow behind the moving light */
+.live-feed::after{inset:-4px;padding:6px;filter:blur(10px);opacity:.7}
+@keyframes lf-border-spin{to{--lf-angle:360deg}}
+@media(prefers-reduced-motion:reduce){.live-feed::before,.live-feed::after{animation:none}}

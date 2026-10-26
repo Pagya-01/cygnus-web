@@ -1,6 +1,5 @@
 import { Building2, Factory, GraduationCap, HeartPulse, Hotel, Landmark, Plane, ShoppingBag, Stethoscope, Truck, Utensils, Workflow } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import useTilt from './useTilt.js';
 
 const SCROLL_SPEED_BOOST = 10.55;
 const SCROLL_IDLE_MS = 100;
@@ -14,19 +13,8 @@ const orbitIcons = [
   delay: `${-index * 8}s`,
 }));
 
-const industryCards = [
-  { title: 'Manufacturing', detail: 'Plant visits, vendor audits and shift travel, booked within each grade’s policy.', Icon: Factory },
-  { title: 'Banking & financial services', detail: 'Client meetings and branch audits, with strict approvals and a full audit trail.', Icon: Landmark },
-  { title: 'IT & technology', detail: 'Project and client-site travel at scale, billed to the right project and cost centre.', Icon: Workflow },
-  { title: 'Pharma & healthcare', detail: 'Field teams moving across tier-2 and tier-3 cities, with every trip in policy.', Icon: Stethoscope },
-  { title: 'Retail & FMCG', detail: 'Store visits and regional travel, with spend visible by zone and team.', Icon: ShoppingBag },
-  { title: 'Logistics & supply chain', detail: 'Hub and warehouse visits at short notice, approved in minutes on WhatsApp.', Icon: Truck },
-];
-
 export default function IndustriesSection() {
   const sectionRef = useRef(null);
-  const cardsRef = useRef(null);
-  useTilt(cardsRef, '.industry-card', { tilt: false });
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -98,12 +86,5 @@ export default function IndustriesSection() {
       </div>
       <span className="industry-center-glow" aria-hidden="true"/>
     </div>
-    <ul ref={cardsRef} className="industry-cards">
-      {industryCards.map(({ title, detail, Icon }) => <li className="industry-card" key={title}>
-        <span className="industry-card-icon"><Icon size={18} strokeWidth={1.65} aria-hidden="true"/></span>
-        <h3>{title}</h3>
-        <p>{detail}</p>
-      </li>)}
-    </ul>
   </section>;
 }

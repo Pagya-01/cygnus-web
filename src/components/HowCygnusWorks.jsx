@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, BrainCircuit, CircleCheck, MessageSquareText, Network } from 'lucide-react';
 import useTilt from './useTilt.js';
+import LiveFeed from './LiveFeed.jsx';
 import voyagerMark from '../assets/voyager-mark.svg';
 
 const steps = [
@@ -12,7 +13,17 @@ const steps = [
 
 export default function HowCygnusWorks() {
   const stepsRef = useRef(null);
+  const [stepsIn, setStepsIn] = useState(false);
   useTilt(stepsRef, '.hcw-step', { tilt: false });
+
+  // the step cards rise in one by one the first time the list scrolls into view
+  useEffect(() => {
+    const list = stepsRef.current;
+    if (!list || !('IntersectionObserver' in window)) { setStepsIn(true); return undefined; }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStepsIn(true); io.disconnect(); } }, { threshold: .25 });
+    io.observe(list);
+    return () => io.disconnect();
+  }, []);
   return <section id="how-cygnus-works" className="hcw-section" aria-labelledby="hcw-title">
     <span className="hcw-eyebrow"><i/> How Cygnus Works</span>
     <div className="hcw-columns">
@@ -29,8 +40,9 @@ export default function HowCygnusWorks() {
       </div>
       <div className="hcw-steps">
         <h2 id="hcw-title">From travel request to finished trip,<br className="hcw-break"/> in four steps.</h2>
-        <ol ref={stepsRef} className="hcw-step-list">
-          {steps.map(({ key, title, detail, Icon }, index) => <li className={`hcw-step hcw-step-${key}`} key={key}>
+        <div className="hcw-flow">
+        <ol ref={stepsRef} className={`hcw-step-list${stepsIn ? ' is-in' : ''}`}>
+          {steps.map(({ key, title, detail, Icon }, index) => <li className={`hcw-step hcw-step-${key}`} key={key} style={{ '--i': index }}>
             <div className="hcw-step-top">
               <span className="hcw-step-icon"><Icon size={25} strokeWidth={1.8} aria-hidden="true"/></span>
               <small>0{index + 1}</small>
@@ -40,6 +52,8 @@ export default function HowCygnusWorks() {
             {index < steps.length - 1 && <span className="hcw-step-arrow" aria-hidden="true"><ArrowRight size={14}/></span>}
           </li>)}
         </ol>
+        <LiveFeed/>
+        </div>
       </div>
     </div>
   </section>;
