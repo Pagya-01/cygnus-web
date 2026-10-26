@@ -78,7 +78,8 @@ function AgentDemoVideo() {
 
 export default function AgentsPage() {
   const pageRef = useRef(null);
-  useTilt(pageRef, '.agents-page-visual, .agents-page-flow-card, .agents-page-benefit-card', { tilt: false });
+  useTilt(pageRef, '.agents-page-flow-card, .agents-page-benefit-card', { tilt: false });
+  useTilt(pageRef, '.agents-page-visual');
   return <main ref={pageRef} className="agents-page" id="top">
     <section className="agents-page-hero" aria-labelledby="agents-page-title">
       <span className="agents-page-rings" aria-hidden="true"><i/><i/><i/></span>

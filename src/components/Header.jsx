@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowRight, BookOpen, Bot, Building2, ChartBar, ChevronDown, CircleHelp, DollarSign, Grid2X2, Menu, Phone, PlayCircle, Plug, Settings, Sparkles, Trophy, Workflow } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, BookOpen, Bot, Building2, ChartBar, ChevronDown, CircleHelp, DollarSign, Grid2X2, Menu, Phone, PlayCircle, Plug, Settings, Sparkles, Workflow } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 const menuContent = {
@@ -25,7 +25,6 @@ const menuContent = {
     items: [
       { title: 'Product tour', description: 'A 2-minute walkthrough of Voyager.', href: '/resources#resources-video', Icon: PlayCircle },
       { title: 'Policy & expense guide', description: 'How to set travel rules people actually follow.', href: '/resources#expense-policies', Icon: BookOpen },
-      { title: 'Customer stories', description: 'How teams run business travel with Cygnus.', href: '/resources#resources-blog', Icon: Trophy },
       { title: 'FAQs', description: 'Setup, security, billing and support.', href: '/resources#faqs', Icon: CircleHelp },
     ],
   },
@@ -65,10 +64,19 @@ function NavDropdown({ menuKeys, title, openMenu, setOpenMenu, isCurrent = false
 export default function Header({ isResources = false, isProduct = false, isAgents = false, isContactUs = false, isCareers = false, isTravelAdmins = false, isFinanceCfo = false, isCorporateTravelers = false }) {
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Transparent over the top of the page; gets a frosted background once the page scrolls.
+  const [scrolled, setScrolled] = useState(() => window.scrollY > 8);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const homeHref = isResources || isProduct || isAgents || isContactUs || isCareers || isTravelAdmins || isFinanceCfo || isCorporateTravelers ? '/#top' : '#top';
   const demoHref = isContactUs || isCareers ? '/contactus#contact-cta' : isTravelAdmins ? '#travel-admin-demo' : isFinanceCfo ? '#finance-demo' : isCorporateTravelers ? '#traveler-demo' : isResources || isProduct || isAgents ? '/#contact-cta' : '#contact-cta';
 
-  return <header className="header">
+  return <header className={`header${scrolled || mobileOpen ? ' is-scrolled' : ''}`}>
     <a className="brand" href={homeHref} aria-label="Cygnus home"><BrandLogo /></a>
     <nav className={`nav${mobileOpen ? ' is-mobile-open' : ''}`} aria-label="Main navigation" onKeyDown={(event) => { if (event.key === 'Escape') { setOpenMenu(null); event.currentTarget.querySelector('.nav-trigger:focus')?.blur(); } }} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpenMenu(null); }} onClick={(event) => { if (event.target.closest('a')) setMobileOpen(false); }}>
       <NavDropdown menuKeys={['product', 'solutions']} title="Product" openMenu={openMenu} setOpenMenu={setOpenMenu} isCurrent={isProduct || isTravelAdmins || isFinanceCfo || isCorporateTravelers}/>

@@ -15,50 +15,35 @@ const policyFeatures = [
   'Escalate exceptions with context and a decision trail',
 ];
 
-const blogArticles = [
-  {
-    initials: 'TP', category: 'Anonymous',
-    title: 'A better way to build a business travel policy',
-    summary: 'Create clear guidance that gives employees flexibility while keeping every trip aligned. Start with the needs of your teams, set expectations that are easy to understand, and make room for exceptions without losing visibility.',
-  },
-  {
-    initials: 'EM', category: 'Anonymous',
-    title: 'Bring travel spend into the same conversation',
-    summary: 'Connect booking and expense context to make reviews faster and decisions more useful.',
-  },
-  {
-    initials: 'TO', category: 'Anonymous',
-    title: 'Turn every trip into a clearer view of your program',
-    summary: 'Use connected travel data to spot patterns, guide teams, and plan with confidence. A shared view of bookings and spend helps teams understand where friction appears and where a small change can improve the journey.',
-  },
-  {
-    initials: 'BI', category: 'Anonymous',
-    title: 'What connected travel data can tell you',
-    summary: 'Look beyond individual bookings to understand traveler needs, cost patterns, and the decisions that shape your program.',
-  },
-  {
-    initials: 'TX', category: 'Anonymous',
-    title: 'Make the journey easier for every traveler',
-    summary: 'A thoughtful travel experience gives people useful information at the right time, from the first search to the return home.',
-  },
-  {
-    initials: 'FC', category: 'Anonymous',
-    title: 'Keep policy and flexibility in balance',
-    summary: 'Build guardrails around the decisions that matter, then give travelers room to choose what works within them.',
-  },
-];
-
 const faqs = [
+  { question: 'What does the Cygnus AI agent do, and when does a person step in?', answer: 'The agent does the routine work: it finds options, checks them against your policy, books, sends tickets, chases approvers and rebooks when plans change. It also remembers each traveller’s preferences, like a window seat or a favourite hotel. Anything unusual, such as a visa problem, a large group trip or an urgent change, goes to our travel desk, who see the full history and take it from there.' },
+  { question: 'How do employees book on WhatsApp?', answer: 'They message Cygnus the way they’d message a colleague, for example “Mumbai to Bengaluru, Thursday morning, back Friday.” The agent replies with options that fit your policy, books the one they pick, and sends the ticket and hotel voucher in the same chat. Employees who prefer the web can book there instead.' },
+  { question: 'How does Cygnus make sure bookings follow our travel policy?', answer: 'You set your policy once: fare limits, hotel caps, cabin class and how far ahead to book, with different rules for different grades or departments if you need them. Every option is checked against it before the employee sees it. Trips within policy go straight through, and anything outside goes to the right approver with the reason shown.' },
+  { question: 'My flight was cancelled late at night. What happens now?', answer: 'You don’t need to call anyone. As soon as the airline cancels, the agent finds the next best flight within policy, rebooks you, moves your hotel and cab to match, and sends the new details on WhatsApp. If a decision needs a person, our travel desk is on call [24/7].' },
+  { question: 'How does the single monthly bill work?', answer: 'Employees don’t pay for anything or file expense claims. Every booking is billed to your company account, and at the end of the month finance gets one bill with a GST invoice for each booking. It’s broken down by employee, department and cost centre, and payment is due within [X days].' },
+  { question: 'What does Cygnus charge?', answer: 'You pay the fare plus [a flat service fee per booking / a monthly subscription], with [no setup cost]. The price depends on your team size and how often you travel. Book a demo and we’ll send you a quote.' },
+  { question: 'How long does it take to get my company set up on Cygnus?', answer: 'Most companies are booking within [X days]. Send us your travel policy, your approval chain and your employee list, or connect your HRMS, and we’ll set up the rules, approvers and billing for you. Your employees get a WhatsApp message and can start booking right away.' },
+  { question: 'Is our employees’ data safe, and where is it stored?', answer: 'Traveller data is encrypted in transit and at rest, and it’s stored [in India / region]. Only the people you authorise can see bookings and spend. [Add any certification you hold, such as ISO 27001.] We never share your data with third parties beyond what’s needed to complete a booking.' },
   { question: 'How does Cygnus help manage travel expenses?', answer: 'Cygnus brings trip costs and expense details into one clear view. Replace this with your final expense management information.' },
   { question: 'Can we set different travel policies for different teams?', answer: 'Set policy rules to fit the way each team travels. Add details about your policy options here.' },
   { question: 'What happens when a booking falls outside policy?', answer: 'Out-of-policy choices can be flagged and sent for review. Add your approval workflow details here.' },
   { question: 'Do travellers see policy guidance before they book?', answer: 'Travelers can see relevant guidance during the booking process. Replace this with details about when policy checks appear.' },
   { question: 'Can finance and travel teams see the same information?', answer: 'Teams can work from a shared view of travel and spend. Add details about your reporting and integrations here.' },
+  { question: 'Can policies vary by destination or travel type?', answer: 'Yes. Set rules around the teams, destinations, or types of travel that matter to your organisation.' },
+  { question: 'How are out-of-policy requests handled?', answer: 'Requests that need review can be routed to an approver with the trip details and policy context.' },
+  { question: 'Can managers approve travel requests?', answer: 'Approval workflows can involve the right manager or approver before a booking is confirmed.' },
+  { question: 'Can employees request help with a trip?', answer: 'Travellers can contact the travel team for help with requests, changes, or questions about their plans.' },
+  { question: 'Can I see upcoming trips in one place?', answer: 'A shared view of trip information helps travel teams keep track of bookings and changes.' },
+  { question: 'Can Cygnus help when travel plans change?', answer: 'The travel team can coordinate updates and keep the relevant trip details together as plans change.' },
+  { question: 'Can we review travel spend by team?', answer: 'Travel and expense information can help teams understand costs across their organisation.' },
+  { question: 'Can we connect travel information with finance tools?', answer: 'Cygnus supports integrations with finance and HR systems. Contact the team to discuss the systems you use.' },
+  { question: 'How do we get started with Cygnus?', answer: 'Book a demo to discuss your travel programme, policies, and the needs of your team.' },
+  { question: 'Who can help us set up our travel policies?', answer: 'The Cygnus team can help you discuss your requirements and plan a setup that fits your organisation.' },
 ];
 
 export default function ResourcesPage() {
   const pageRef = useRef(null);
-  useTilt(pageRef, '.resources-expense-step, .resources-policy-card, .resources-blog-card', { tilt: false });
+  useTilt(pageRef, '.resources-expense-step, .resources-policy-card', { tilt: false });
   const [activeFaq, setActiveFaq] = useState(null);
   const [supportsHover, setSupportsHover] = useState(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches);
   const hoverTimer = useRef(null);
@@ -178,26 +163,6 @@ export default function ResourcesPage() {
             <p>Make policy part of the travel experience, so teams can act early and handle exceptions with confidence.</p>
             <ul>{policyFeatures.map(item => <li key={item}><Check size={15}/>{item}</li>)}</ul>
           </aside>
-        </div>
-      </section>
-
-      <section className="resources-blog-section" id="resources-blog" aria-labelledby="resources-blog-title">
-        <div className="resources-blog-heading">
-          <div>
-            <span className="resources-kicker"><i/> Blogs </span>
-            <h2 id="resources-blog-title">What Our Clients say </h2>
-          </div>
-          {/* <p>Practical perspectives on travel programs, expense management, and the work behind every journey.</p> */}
-        </div>
-        <div className="resources-blog-grid">
-          {blogArticles.map(({ initials, category, title, summary }) => <article className="resources-blog-card" key={title}>
-            <div className="resources-blog-copy">
-              <div className="resources-blog-meta"><span className="resources-blog-avatar" aria-hidden="true">{initials}</span><span className="resources-blog-category">{category}</span></div>
-              <h3>{title}</h3>
-              <div className="resources-blog-rating" role="img" aria-label="5 out of 4 stars">★★★★★</div>
-              <p>{summary}</p>
-            </div>
-          </article>)}
         </div>
       </section>
 

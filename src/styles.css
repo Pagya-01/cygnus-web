@@ -2208,11 +2208,12 @@ main,section,article{min-width:0}
 .resources-page .resources-blog-card h3{color:var(--color-text-primary);font-weight:700;letter-spacing:0}
 .resources-page .resources-blog-rating{color:var(--color-brand-primary)}
 .resources-page .resources-faq-section{display:grid;grid-template-columns:384px minmax(0,712px);justify-content:space-between;gap:48px;padding:111px 0 130px}
-.resources-page .resources-faq-intro{display:flex;flex-direction:column;align-items:flex-start;gap:0;text-align:left}
+.resources-page .resources-faq-intro{position:sticky;top:120px;align-self:start;display:flex;flex-direction:column;align-items:flex-start;gap:0;text-align:left}
 .resources-page .resources-faq-intro h2{margin:18px 0 0;color:var(--color-text-primary);font-size:48px;font-weight:700;line-height:60px;letter-spacing:-.96px}
 .resources-page .resources-faq-intro>p{max-width:232px;margin:26px 0 0;color:var(--color-text-secondary);font-size:14px;line-height:20px}
 .resources-page .resources-faq-icon{display:grid;width:44px;height:44px;margin-top:30px;place-items:center;border:1px solid rgba(88,98,236,.16);border-radius:16px;color:var(--color-brand-primary);background:#fff}
-.resources-page .resources-faq-list{border-top:1px solid var(--color-border-default)}
+.resources-page .resources-faq-list{max-height:calc(100svh - 150px);overflow:auto;overscroll-behavior-y:auto;border-top:1px solid var(--color-border-default);scrollbar-width:none}
+.resources-page .resources-faq-list::-webkit-scrollbar{display:none}
 .resources-page .resources-faq-item{border-bottom:1px solid var(--color-border-default);background:transparent}
 .resources-page .resources-faq-question{gap:18px;padding:21px 4px;color:var(--color-text-primary);font-size:18px;font-weight:700;line-height:28px;font-family:var(--font-display)!important}
 .resources-page .resources-faq-question span{font-family:var(--font-display)!important}
@@ -2231,6 +2232,8 @@ main,section,article{min-width:0}
   .resources-page .resources-expense-grid{grid-template-columns:minmax(0,1fr);gap:16px}
   .resources-page .resources-expense-steps{gap:16px}
   .resources-page .resources-faq-section{grid-template-columns:minmax(0,1fr);gap:40px;padding:80px 0 96px}
+  .resources-page .resources-faq-intro{position:static}
+  .resources-page .resources-faq-list{max-height:none;overflow:visible;scrollbar-gutter:auto}
   .resources-page .resources-faq-intro h2{margin-top:14px}
   .resources-page .resources-faq-intro>p{margin-top:14px}
   .resources-page .resources-faq-icon{margin-top:14px}
@@ -2548,84 +2551,6 @@ main,section,article{min-width:0}
   .contact-cta-globe:after{height:83px}
 }
 
-/* Voyager engine stage animation (Figma mech-stage 1038234:45247, 16.8s loop). Design space 1442×520, scaled by --mech-scale. */
-.mech{position:relative;width:100%;aspect-ratio:1442/520;overflow:hidden;background:#0f1e36}
-.mech-canvas{position:absolute;top:0;left:0;width:1442px;height:520px;overflow:hidden;transform:scale(var(--mech-scale,1));transform-origin:0 0;background:linear-gradient(175.68deg,#0f1e36 1.73%,#1a1624 55.38%,#0f1e36 91.14%)}
-.mech-canvas img{position:absolute;display:block;max-width:none}
-.mech-grid{top:0;left:117px;width:1203px;height:597px}
-.mech-light{position:absolute;inset:0;background:#fff;opacity:0}
-.mech-squash{position:absolute;top:-40.1px;left:146px;width:1187.94px;height:468px;transform-origin:50% 50%}
-.mech-blink,.mech-parts{position:absolute;inset:0}
-.mech-part{position:absolute}
-.mech-clip{position:absolute;inset:0;overflow:hidden}
-.mech-canvas .mech-clip>img.mech-layer{top:0;left:0;width:100%;height:100%}
-.mech-clip>span.mech-layer{position:absolute}
-.mech-canvas .mech-clip>span.mech-layer img{position:static;width:100%;height:100%}
-.mech-canvas .mech-boss{top:50%;left:50%;width:70.512px;height:67.08px}
-.mech-face{position:absolute;top:121px;left:613px;width:300px;height:300px;opacity:0}
-.mech-face-spin,.mech-face-squash{position:absolute;inset:0;transform-origin:50% 50%}
-.mech-bolt{position:absolute;width:51px;height:51px}
-.mech-canvas .mech-spoke{top:149.4px;left:228px;width:40.5px;height:.6px;transform-origin:-78px .6px}
-.mech-canvas .mech-logo-glow{top:186px;left:631px;width:170px;height:170px;opacity:0}
-.mech-logo{position:absolute;top:239px;left:683px;width:66px;height:64px;opacity:0}
-.mech-canvas .mech-logo img{top:0;left:0;width:100%;height:99.48%;transform-origin:50% 50%}
-.mech-fade{position:absolute;top:0;width:80px;height:520px}
-.mech-fade-left{left:0;background:linear-gradient(90deg,#0f1e36,rgba(15,30,54,0))}
-.mech-fade-right{top:-10px;left:1360px;background:linear-gradient(90deg,rgba(15,30,54,0),#0f1e36)}
-
-.mech .mech-light{animation:mech-light 16.8s linear infinite}
-.mech .mech-fade{animation:mech-fade 16.8s linear infinite}
-.mech .mech-parts{animation:mech-ink 16.8s linear infinite}
-.mech .mech-squash{animation:mech-squash 16.8s linear infinite}
-.mech .mech-blink{animation:mech-blink 16.8s linear infinite}
-.mech .mech-face{animation:mech-face 16.8s linear infinite}
-.mech .mech-face-spin{animation:mech-face-spin 16.8s linear infinite}
-.mech .mech-face-squash{animation:mech-face-squash 16.8s linear infinite}
-.mech .mech-logo-glow{animation:mech-glow 16.8s linear infinite}
-.mech .mech-logo{animation:mech-logo 16.8s linear infinite}
-.mech .mech-logo img{animation:mech-logo-pop 16.8s linear infinite}
-.mech .mech-move-a{animation:mech-move-a 16.8s linear infinite}
-.mech .mech-move-b{animation:mech-move-b 16.8s linear infinite}
-.mech .mech-move-c{animation:mech-move-c 16.8s linear infinite}
-.mech .mech-move-d{animation:mech-move-d 16.8s linear infinite}
-.mech .mech-move-e{animation:mech-move-e 16.8s linear infinite}
-.mech .mech-move-f{animation:mech-move-f 16.8s linear infinite}
-.mech .mech-move-g{animation:mech-move-g 16.8s linear infinite}
-/* hold the loop while the stage is off screen */
-.mech:not(.is-playing),.mech:not(.is-playing) *{animation-play-state:paused!important}
-
-@keyframes mech-light{0%,5.06%{opacity:1;animation-timing-function:ease-in-out}8.93%,100%{opacity:0}}
-@keyframes mech-fade{0%,5.06%{opacity:0;animation-timing-function:ease-in-out}8.93%,100%{opacity:1}}
-/* strokes start dark on the light theme, then turn light */
-@keyframes mech-ink{0%,5.06%{filter:brightness(.12);animation-timing-function:ease-in-out}8.93%,100%{filter:brightness(1)}}
-@keyframes mech-squash{
-  0%,5.36%{transform:translateX(0) scaleX(1);animation-timing-function:cubic-bezier(.55,0,.9,.45)}
-  8.04%,13.99%{transform:translateX(-21.652px) scaleX(.05);animation-timing-function:cubic-bezier(.22,1,.36,1)}
-  16.67%,100%{transform:translateX(0) scaleX(1)}}
-@keyframes mech-blink{
-  0%,7.62%{opacity:1;animation-timing-function:cubic-bezier(.5,0,.5,1)}
-  8.1%,13.81%{opacity:0;animation-timing-function:cubic-bezier(.5,0,.5,1)}
-  14.29%,100%{opacity:1}}
-@keyframes mech-face{
-  0%,7.74%{opacity:0;animation-timing-function:cubic-bezier(.5,0,.5,1)}
-  8.33%,13.57%{opacity:1;animation-timing-function:cubic-bezier(.5,0,.5,1)}
-  14.17%,100%{opacity:0}}
-@keyframes mech-face-spin{0%,7.86%{transform:rotate(0)}14.05%,100%{transform:rotate(24deg)}}
-@keyframes mech-face-squash{
-  0%,7.86%{transform:scaleX(.05);animation-timing-function:cubic-bezier(.22,1,.36,1)}
-  10.71%{transform:scaleX(1)}
-  11.61%{transform:scaleX(1);animation-timing-function:cubic-bezier(.55,0,.9,.45)}
-  14.05%,100%{transform:scaleX(.05)}}
-@keyframes mech-glow{0%,22.02%{opacity:0;animation-timing-function:cubic-bezier(.22,1,.36,1)}26.19%,100%{opacity:1}}
-@keyframes mech-logo{0%,22.02%{opacity:0;animation-timing-function:cubic-bezier(.22,1,.36,1)}24.7%,100%{opacity:1}}
-@keyframes mech-logo-pop{0%,22.02%{transform:scale(.6);animation-timing-function:cubic-bezier(.45,1.45,.8,1)}25.6%,100%{transform:scale(1)}}
-@keyframes mech-move-a{0%,17.86%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}26.79%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-b{0%,19.35%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}28.27%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-c{0%,20.54%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}29.46%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-d{0%,21.13%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}30.06%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-e{0%,21.73%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}30.65%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-f{0%,22.32%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}31.25%,100%{transform:translateX(var(--dx))}}
-@keyframes mech-move-g{0%,22.92%{transform:translateX(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}31.85%,100%{transform:translateX(var(--dx))}}
 
 /* Rotating contact globe (canvas replaces the static wireframe image) */
 .contact-globe-canvas{display:block;width:100%;height:auto;aspect-ratio:492/212}
@@ -2715,3 +2640,90 @@ main,section,article{min-width:0}
   .agents-page-video-controls button{width:36px;height:36px}
   .agents-page-video-controls button svg{width:15px;height:15px}
 }
+
+/* Homepage AI agents: left-column rows slide in from the left one after another, quickly enough to read as a sequence */
+.agents-section{--agent-slide-distance:60px;--agent-slide-duration:.65s;--agent-stagger:.22s;--agent-line-duration:.3s}
+.is-visible .agent-timeline-row{animation-timing-function:cubic-bezier(.22,1,.36,1)}
+
+/* Hero sky background: pinned to the screen while the hero scrolls, zooms in with scroll (--hero-zoom from Hero.jsx).
+   A soft white wash keeps the dark heading and text readable over the blue. */
+.hero{background:#fff}
+.hero .sky-glow,.hero .cloud-bank,.hero .horizon-haze{display:none}
+.hero-sky{position:absolute;z-index:-2;inset:0;pointer-events:none}
+.hero-sky-image{position:sticky;top:0;width:100%;height:100vh;height:100svh;overflow:hidden}
+.hero-sky-image:before{position:absolute;inset:0;background:url('./assets/hero-sky.jpg') center 40%/cover no-repeat;transform:scale(var(--hero-zoom,1));transform-origin:50% 40%;will-change:transform;content:''}
+.hero-sky-image:after{position:absolute;inset:0;background:radial-gradient(ellipse 60% 48% at 50% 50%,rgba(255,255,255,.82),rgba(255,255,255,.5) 60%,rgba(255,255,255,.2) 100%),linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 40%);content:''}
+@media(max-width:620px){.hero-sky-image:after{background:radial-gradient(ellipse 90% 45% at 50% 50%,rgba(255,255,255,.85),rgba(255,255,255,.5) 65%,rgba(255,255,255,.25) 100%)}}
+.hero{overflow:clip}
+
+/* Transparent navbar: clear over the top of each page, frosted white once the page scrolls (Header.jsx adds .is-scrolled) */
+.header{background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;transition:background-color .25s ease,box-shadow .25s ease,backdrop-filter .25s ease}
+.header.is-scrolled{background:rgba(255,255,255,.82);box-shadow:0 1px 0 rgba(15,30,54,.06),0 6px 20px rgba(15,30,54,.05);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
+
+/* Trusted logos are pinned while their scroll animation runs, so the pinned frame fills the screen (no blank band under it) */
+@media(min-width:1024px){.trusted-section{min-height:100vh;min-height:100svh;justify-content:center;padding-top:78px}}
+
+/* ==========================================================================
+   Section spacing, site-wide: every content section gets the same white space
+   above and below. Page-top heroes keep their own spacing (room for the navbar).
+   ========================================================================== */
+:root{--section-space:112px}
+@media(max-width:1023px){:root{--section-space:88px}}
+@media(max-width:620px){:root{--section-space:64px}}
+#root :is(.hcw-section,.agents-section,.industries-section,.contact-cta,
+  .pv-scenes,.pv-roles,
+  .agents-page-workflow,.agents-page-video-section,.agents-page-benefits,
+  .resources-video-section,.resources-expenses-section,.resources-faq-section,
+  .careers-board-section,
+  .solution-challenges,.solution-features,.solution-demo){padding-top:var(--section-space);padding-bottom:var(--section-space)}
+/* the closing card follows a section that already has bottom space */
+#root .closing-card-section{padding-top:0;padding-bottom:var(--section-space)}
+/* Contact us page: the form section is the page top */
+#root .contact-form-page .contact-cta{padding-top:151px}
+@media(max-width:1023px){#root .contact-form-page .contact-cta{padding-top:150px}}
+@media(max-width:620px){#root .contact-form-page .contact-cta{padding-top:134px}}
+
+/* ==========================================================================
+   One content grid, site-wide (≥1024px): navbar, footer and every section line
+   up on the same 1240px column, with 40px side gutters on narrower laptops.
+   ========================================================================== */
+:root{--container:1240px;--gutter:40px}
+@media(min-width:1024px){
+  .header{padding-inline:max(var(--gutter),calc((100vw - var(--container)) / 2))}
+  .site-footer .footer-inner{width:min(calc(100% - 2 * var(--gutter)),var(--container))}
+  #root :is(.hcw-section,.agents-section,.industries-section,.contact-cta,.pv-engine,.pv-roles,
+    .agents-page-hero,.agents-page-workflow,.agents-page-video-section,.agents-page-benefits,
+    .resources-video-section,.resources-expenses-section,.resources-faq-section,.careers-board-section,
+    .solution-hero,.solution-challenges,.solution-features,.solution-demo,.closing-card-section){padding-left:var(--gutter);padding-right:var(--gutter)}
+  #root :is(.hcw-columns,.agents-inner,.industry-cards,.contact-cta-grid,.pv-parts,.pv-role-rows,.closing-card,
+    .agents-page-hero-inner,.agents-page-flow-grid,.agents-page-benefit-grid,
+    .resources-section-heading,.resources-expense-grid,.resources-video-frame,.careers-board-container,
+    .solution-showcase,.solution-challenge-grid,.solution-feature-grid){width:100%;max-width:var(--container);margin-left:auto;margin-right:auto;box-sizing:border-box}
+  #root .pv-parts{padding:72px 0}
+  /* FAQ: intro + list span the same column */
+  #root .resources-faq-section>*:first-child{margin-left:max(0px,calc((100% - var(--container)) / 2))}
+}
+
+/* Careers "Open roles": same eyebrow + heading style as every other section */
+.careers-board-heading>span{display:inline-flex;align-items:center;gap:8px;color:var(--color-brand-accent-deep);font-family:var(--font-body)!important;font-size:12px;font-weight:600;line-height:16px;letter-spacing:.96px;text-transform:uppercase}
+.careers-board-heading>span:before{width:6px;height:6px;border-radius:50%;background:var(--color-brand-primary);box-shadow:0 0 0 4px rgba(88,98,236,.1);content:''}
+#root .careers-board-heading h2{color:var(--color-text-primary);font-family:var(--font-display)!important;font-size:48px;font-weight:700;line-height:60px;letter-spacing:-.96px}
+@media(max-width:1023px){#root .careers-board-heading h2{font-size:36px;line-height:44px;letter-spacing:-.72px}}
+@media(max-width:620px){#root .careers-board-heading h2{font-size:28px;line-height:34px;letter-spacing:-.56px}}
+@media(min-width:1024px){#root .resources-shell>:is(.resources-video-section,.resources-expenses-section,.resources-faq-section){padding-left:0;padding-right:0}#root .resources-faq-section>*:first-child{margin-left:0}}
+
+/* Hero: copy and card carousel together in one section, with the original Figma spacing */
+.hero{display:flex;min-height:100vh;min-height:100svh;flex-direction:column;align-items:center;padding:78px 0 48px;box-sizing:border-box}
+.hero .hero-copy{width:100%;max-width:none;margin:0;padding:56px 20px 0;box-sizing:border-box}
+.hero .hero-copy>*{max-width:950px;margin-left:auto;margin-right:auto}
+.hero .hero-copy p{max-width:680px}
+.hero .hero-cards{position:relative;z-index:2;display:flex;width:100%;flex-direction:column;align-items:center;padding-top:64px}
+.hero .carousel-caption{margin-top:0}
+.hero .carousel{height:var(--carousel-height,250px);margin-top:20px}
+.hero .hero-foot{margin-top:0;padding:16px 0 0}
+.hero .travel-card{width:120px;height:150px;zoom:var(--card-zoom,1)}
+.hero-sky-image{height:100%}
+@media(max-width:1023px){.hero .hero-copy{padding:48px 64px 0}.hero .hero-copy p{max-width:none}.hero .hero-cards{padding-top:40px}}
+@media(max-width:620px){.hero{padding-bottom:32px}.hero .hero-copy{padding:40px 20px 0}.hero .hero-cards{padding-top:36px}}
+#root .industry-cards{padding-bottom:0}
+#root .industries-section{padding-top:0}

@@ -12,13 +12,19 @@ const CARD_SIZE_PX = { width: 120, height: 150 }; // Hero feature card dimension
 const SLOT_STEP_RATIO = 0.1112; // Keeps outer slots near the viewport edges.
 const MIN_SLOT_STEP_PX = 159; // Figma keeps the 1440 spacing on tablet and mobile.
 
+// Cards share the hero screen with the copy, so they grow only as far as the screen height allows (1 = Figma size).
+function getCardScale(width, height) {
+  if (width <= 620) return 1;
+  return Math.min(1.4, Math.max(1, Math.min(width / 860, (height - 600) / 160)));
+}
+
 function getOffset(index, activeIndex, count) {
   const focusStart = Math.floor(count / 2) - 1;
   const slot = (index - activeIndex + focusStart + count) % count;
   return slot - (count - 1) / 2;
 }
 
-function getCardPosition(index, activeIndex, count, viewportWidth) {
+function getCardPosition(index, activeIndex, count, viewportWidth, cardScale) {
   const offset = getOffset(index, activeIndex, count);
   const ring = Math.max(0, Math.round(Math.abs(offset) - 0.5));
   const depth = ring * 44;
@@ -33,7 +39,7 @@ function getCardPosition(index, activeIndex, count, viewportWidth) {
     ring,
     style: {
       '--offset': offset,
-      '--x': `${offset * Math.max(MIN_SLOT_STEP_PX, viewportWidth * SLOT_STEP_RATIO)}px`,
+      '--x': `${offset * Math.max(MIN_SLOT_STEP_PX * cardScale, viewportWidth * SLOT_STEP_RATIO)}px`,
       '--depth': `${-depth}px`,
       '--rotation': `${rotation}deg`,
       '--scale': scale,
@@ -41,8 +47,9 @@ function getCardPosition(index, activeIndex, count, viewportWidth) {
       '--blur': `${blur}px`,
       '--opacity': opacity,
       '--card-z': ring === 0 ? 20 : 10 - ring,
-      '--card-width': `${CARD_SIZE_PX.width}px`,
-      '--card-height': `${CARD_SIZE_PX.height}px`,
+      '--card-width': `${CARD_SIZE_PX.width * cardScale}px`,
+      '--card-height': `${CARD_SIZE_PX.height * cardScale}px`,
+      '--card-zoom': cardScale,
       '--transition-duration': `${TRANSITION_DURATION_MS}ms`,
     },
   };
@@ -52,12 +59,13 @@ export default function HeroCarousel({ activeIndex, onActiveIndexChange }) {
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
+  const [viewportHeight, setViewportHeight] = useState(() => window.innerHeight);
   const [wrappingCards, setWrappingCards] = useState(() => new Set());
   const previousIndex = useRef(activeIndex);
   const wrapTimeout = useRef(null);
 
   useEffect(() => {
-    const onResize = () => setViewportWidth(window.innerWidth);
+    const onResize = () => { setViewportWidth(window.innerWidth); setViewportHeight(window.innerHeight); };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
@@ -99,7 +107,10 @@ export default function HeroCarousel({ activeIndex, onActiveIndexChange }) {
     return () => window.clearInterval(interval);
   }, [paused, reducedMotion, onActiveIndexChange]);
 
+  const cardScale = getCardScale(viewportWidth, viewportHeight);
+
   return <div
+    style={{ '--carousel-height': `${CARD_SIZE_PX.height * cardScale + 44}px` }}
     className={`carousel${reducedMotion ? ' carousel-reduced-motion' : ''}`}
     role="region"
     aria-label="Business travel platform features"
@@ -109,7 +120,7 @@ export default function HeroCarousel({ activeIndex, onActiveIndexChange }) {
     onMouseLeave={() => setPaused(false)}
   >
     {cards.map((card, index) => {
-      const position = getCardPosition(index, activeIndex, cards.length, viewportWidth);
+      const position = getCardPosition(index, activeIndex, cards.length, viewportWidth, cardScale);
       return <div
         className={`carousel-slot${wrappingCards.has(index) ? ' is-wrapping' : ''}`}
         key={card.title}

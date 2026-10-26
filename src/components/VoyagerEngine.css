@@ -1,0 +1,37 @@
+/* Voyager engine (3D, plays on scroll). Replaces the old .mech-* rules and @keyframes mech-*.
+   The track is tall; the stage inside it pins (position: sticky) while the track scrolls past. */
+.voyager-engine-3d {
+  --ve-stage: min(68vh, 600px);  /* height of the engine area */
+  --ve-scroll: 240vh;            /* scroll distance the animation plays over: smaller = faster */
+  --ve-header: 78px;             /* height of the site header, so the engine pins centred below it */
+  position: relative;
+  align-self: stretch;           /* the product intro is a centred flex column; take the full width */
+  width: 100%;
+  height: calc(var(--ve-stage) + var(--ve-scroll));
+  margin-top: 28px;
+}
+.voyager-engine-3d-stage {
+  position: sticky;
+  top: calc(var(--ve-header) + (100vh - var(--ve-header) - var(--ve-stage)) / 2);
+  height: var(--ve-stage);
+}
+.voyager-engine-3d-stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Reduced motion: no pinning, one still frame */
+.voyager-engine-3d.is-still { height: var(--ve-stage); }
+.voyager-engine-3d.is-still .voyager-engine-3d-stage { position: relative; top: auto; }
+
+/* position: sticky does not work inside overflow: hidden. clip still clips the glow and orbit,
+   but lets the engine pin. */
+.pv-page .pv-intro,
+.product-page .product-intro { overflow: clip; }
+
+@media (max-width: 760px) {
+  .voyager-engine-3d { --ve-stage: min(64vh, 560px); --ve-scroll: 200vh; --ve-header: 78px; }
+}
